@@ -31,7 +31,8 @@
 
 <h3><code>blazecodeprakhar@github ~ $ ./links.sh</code></h3>
 
-<p><b>Fullstack Developer · AI Engineer · Software Builder</b></p>
+<p><b>Full-Stack Developer · Cybersecurity · AI & Machine Learning</b></p>
+
 
 [![GitHub](https://img.shields.io/badge/GitHub-blazecodeprakhar-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/blazecodeprakhar)
 [![Portfolio](https://img.shields.io/badge/Portfolio-blazecodeprakhar.netlify.app-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://blazecodeprakhar.netlify.app/)
