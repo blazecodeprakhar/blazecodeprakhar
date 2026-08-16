@@ -34,7 +34,8 @@
 <p><b>Full-Stack Developer · Cybersecurity · AI & Machine Learning</b></p>
 
 
-[![GitHub](https://img.shields.io/badge/GitHub-blazecodeprakhar-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/blazecodeprakhar) [![Portfolio](https://img.shields.io/badge/Portfolio-blazecodeprakhar-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://blazecodeprakhar.netlify.app/) [![Instagram](https://img.shields.io/badge/Instagram-iitzprakhar-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/iitzprakhar/)
+[![GitHub](https://img.shields.io/badge/GitHub-blazecodeprakhar-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/blazecodeprakhar) [![Portfolio](https://img.shields.io/badge/Portfolio-blazecodeprakhar-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://blazecodeprakhar.netlify.app/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Prakhar-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/prakhar-yadav096/) [![Instagram](https://img.shields.io/badge/Instagram-iitzprakhar-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/iitzprakhar/)
+
 
 
 <br>
