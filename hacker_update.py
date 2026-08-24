@@ -2,8 +2,8 @@
 """
 hacker_update.py — Terminal-Only Green Matrix Hacker Auto-Update Script
 ========================================================================
-Runs inside a terminal console with 100% glowing green text, ultra-fast electric
-staccato typing sound effects, crisp alignment, and auto-close.
+Runs inside a terminal console with 100% glowing green text, sci-fi binary code
+interface sound effects (bi-tonal data processing beeps), crisp alignment, and auto-close.
 """
 
 import datetime
@@ -30,7 +30,7 @@ RESET    = "\033[0m"
 
 
 def play_beep(freq, duration_ms):
-    """Plays a micro high-frequency electric pulse asynchronously on Windows."""
+    """Plays a micro frequency pulse asynchronously on Windows."""
     if HAS_SOUND:
         try:
             threading.Thread(
@@ -42,24 +42,41 @@ def play_beep(freq, duration_ms):
             pass
 
 
-def play_electric_type_sound():
-    """Very fast, high-pitched electric staccato typing sound (old hacker movie feel)."""
-    freq = random.choice([3200, 3600, 4000, 4400, 4800])
-    play_beep(freq, 6)
+def play_binary_data_sound():
+    """
+    Sci-Fi Binary Code & Data Processing Sound Effect:
+    Alternates between high binary bit (3500Hz) and low binary bit (1750Hz)
+    micro-beeps, simulating a sci-fi computer processing 0s and 1s.
+    """
+    bit_freq = random.choice([1750, 2200, 3100, 3800, 4400])
+    play_beep(bit_freq, 5)
 
 
-def play_electric_burst():
-    """Rapid electric pulse burst for victory screen."""
+def play_scifi_step_chirp():
+    """Sci-Fi computer telemetry dual-tone step sound."""
     if not HAS_SOUND:
         return
-    def _burst():
-        for f in [3500, 4000, 4500, 5000, 5500]:
+    def _chirp():
+        for f in [2400, 3600]:
             try:
-                winsound.Beep(f, 15)
+                winsound.Beep(f, 12)
+            except Exception:
+                pass
+    threading.Thread(target=_chirp, daemon=True).start()
+
+
+def play_scifi_access_granted():
+    """Sci-Fi computer interface confirmation telemetry chime."""
+    if not HAS_SOUND:
+        return
+    def _chime():
+        for f in [1800, 2400, 3200, 4200]:
+            try:
+                winsound.Beep(f, 25)
             except Exception:
                 pass
             time.sleep(0.01)
-    threading.Thread(target=_burst, daemon=True).start()
+    threading.Thread(target=_chime, daemon=True).start()
 
 
 def enable_windows_ansi():
@@ -73,28 +90,29 @@ def clear_screen():
     os.system("cls" if sys.platform == "win32" else "clear")
 
 
-def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.003, beep_freq=2):
-    """Ultra-fast character-by-character printing with rapid electric typing sounds."""
+def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.003, sound_freq=2):
+    """Character-by-character printing with sci-fi binary data processing sounds."""
     sys.stdout.write(color)
     sys.stdout.flush()
     for idx, char in enumerate(text):
         sys.stdout.write(char)
         sys.stdout.flush()
-        if idx % beep_freq == 0 and char not in " \n\r\t":
-            play_electric_type_sound()
+        if idx % sound_freq == 0 and char not in " \n\r\t":
+            play_binary_data_sound()
         time.sleep(char_delay)
     sys.stdout.write(RESET + "\n")
     sys.stdout.flush()
 
 
 def matrix_stream_effect(lines=5, delay=0.015):
-    """Fast hacking matrix code stream with rapid electric micro-zaps."""
+    """Fast hacking matrix code stream with sci-fi binary data processing beeps."""
     chars = "0101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*+=-_<>/"
     for i in range(lines):
         line = "".join(random.choice(chars) for _ in range(70))
         sys.stdout.write(f"{G_DIM}{line}{RESET}\n")
         sys.stdout.flush()
-        play_beep(3800 + (i % 4) * 300, 5)
+        # Sci-Fi binary stream telemetry sound
+        play_binary_data_sound()
         time.sleep(delay)
 
 
@@ -109,16 +127,16 @@ def print_banner():
         "  [ SYSTEM OVERRIDE // BLAZE GITHUB READ-ME SCOREBOARD SYNC ]"
     ]
     for line in banner_lines:
-        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001, beep_freq=3)
+        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001, sound_freq=3)
 
 
 def log_step(text, symbol="[+]"):
-    """Prints perfectly aligned log step in 100% bright green text."""
+    """Prints perfectly aligned log step in 100% bright green text with sci-fi chirp."""
+    play_scifi_step_chirp()
     ts = datetime.datetime.now().strftime("%H:%M:%S")
-    # Clean 4-char aligned tag: [OK], [+], [!], [i]
     tag = f"{symbol:<4}"
     full_str = f"{tag} [{ts}] {text}"
-    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.003, beep_freq=2)
+    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.003, sound_freq=2)
 
 
 def main():
@@ -197,7 +215,7 @@ def main():
         matrix_stream_effect(6)
         print()
 
-        play_electric_burst()
+        play_scifi_access_granted()
         victory_box = [
             "  ┌──────────────────────────────────────────────────────────────────┐",
             "  │  [OK] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB     │",
@@ -205,7 +223,7 @@ def main():
             "  └──────────────────────────────────────────────────────────────────┘"
         ]
         for line in victory_box:
-            hacker_typing_print(line, color=G_BRIGHT, char_delay=0.002, beep_freq=3)
+            hacker_typing_print(line, color=G_BRIGHT, char_delay=0.002, sound_freq=3)
 
         time.sleep(3.0)
 
