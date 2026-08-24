@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-hacker_update.py — Terminal-Only Matrix / Cyberpunk Auto-Update Script
+hacker_update.py — Terminal-Only Green Matrix Hacker Auto-Update Script
 ========================================================================
-Runs inside a terminal console with glowing green text and matrix hacking
-visuals. Refreshes the GitHub contribution scoreboard and auto-closes.
+Runs inside a terminal console with glowing green text, retro movie hacking
+typing audio / beeps, matrix stream visual effects, and auto-close.
 """
 
 import datetime
@@ -11,7 +11,14 @@ import os
 import random
 import subprocess
 import sys
+import threading
 import time
+
+try:
+    import winsound
+    HAS_SOUND = True
+except ImportError:
+    HAS_SOUND = False
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
@@ -21,6 +28,36 @@ G_BRIGHT = "\033[1;32m"
 G_DIM    = "\033[2;32m"
 G_ACCENT = "\033[1;96m"
 RESET    = "\033[0m"
+
+
+def play_beep(freq, duration_ms):
+    """Plays a frequency beep asynchronously on Windows."""
+    if HAS_SOUND:
+        try:
+            threading.Thread(target=winsound.Beep, args=(int(freq), int(duration_ms)), daemon=True).start()
+        except Exception:
+            pass
+
+
+def play_typing_beep():
+    """Retro sci-fi computer terminal typing click/beep."""
+    freq = random.choice([1600, 1800, 2000, 2200, 2400, 2600])
+    play_beep(freq, 12)
+
+
+def play_victory_jingle():
+    """Classic 80s movie hacker 'ACCESS GRANTED' ascending synth bleeps."""
+    if not HAS_SOUND:
+        return
+    def _jingle():
+        notes = [(880, 80), (1046, 80), (1318, 80), (1567, 80), (1760, 220), (2093, 350)]
+        for f, d in notes:
+            try:
+                winsound.Beep(f, d)
+            except Exception:
+                pass
+            time.sleep(0.02)
+    threading.Thread(target=_jingle, daemon=True).start()
 
 
 def enable_windows_ansi():
@@ -34,44 +71,60 @@ def clear_screen():
     os.system("cls" if sys.platform == "win32" else "clear")
 
 
-def matrix_stream_effect(lines=6, delay=0.03):
-    """Simulates a fast hacking matrix code stream in green text."""
+def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.008, beep_interval=3):
+    """Prints text character-by-character with retro movie hacking beeps."""
+    sys.stdout.write(color)
+    sys.stdout.flush()
+    for idx, char in enumerate(text):
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        if idx % beep_interval == 0 and char not in " \n":
+            play_typing_beep()
+        time.sleep(char_delay)
+    sys.stdout.write(RESET + "\n")
+    sys.stdout.flush()
+
+
+def matrix_stream_effect(lines=5, delay=0.025):
+    """Simulates a fast hacking matrix code stream with rapid micro-beeps."""
     chars = "0101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*+=-_<>/"
-    for _ in range(lines):
-        line = "".join(random.choice(chars) for _ in range(70))
-        print(f"{G_DIM}{line}{RESET}")
+    for i in range(lines):
+        line = "".join(random.choice(chars) for _ in range(68))
+        sys.stdout.write(f"{G_DIM}{line}{RESET}\n")
+        sys.stdout.flush()
+        play_beep(1200 + (i % 6) * 250, 10)
         time.sleep(delay)
 
 
 def print_banner():
-    banner = f"""
-{G_BRIGHT}
-  ██████╗ ██╗      █████╗ ███████╗███████╗
-  ██╔══██╗██║     ██╔══██╗╚══███╔╝██╔════╝
-  ██████╔╝██║     ███████║  ███╔╝ █████╗  
-  ██╔══██╗██║     ██╔══██║ ███╔╝  ██╔══╝  
-  ██████╔╝███████╗██║  ██║███████╗███████╗
-  ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝
-  [ SYSTEM OVERRIDE // BLAZE GITHUB READ-ME SCOREBOARD SYNC ]
-{RESET}
-"""
-    print(banner)
+    banner_lines = [
+        "  ██████╗ ██╗      █████╗ ███████╗███████╗",
+        "  ██╔══██╗██║     ██╔══██╗╚══███╔╝██╔════╝",
+        "  ██████╔╝██║     ███████║  ███╔╝ █████╗  ",
+        "  ██╔══██╗██║     ██╔══██║ ███╔╝  ██╔══╝  ",
+        "  ██████╔╝███████╗██║  ██║███████╗███████╗",
+        "  ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝",
+        "  [ SYSTEM OVERRIDE // BLAZE GITHUB READ-ME SCOREBOARD SYNC ]"
+    ]
+    for line in banner_lines:
+        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.003, beep_interval=4)
 
 
 def log_step(text, symbol="[▶]"):
     ts = datetime.datetime.now().strftime("%H:%M:%S")
-    print(f"{G_BRIGHT}{symbol} [{ts}] {text}{RESET}")
+    full_str = f"{symbol} [{ts}] {text}"
+    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.01, beep_interval=3)
 
 
 def main():
     enable_windows_ansi()
     clear_screen()
     print_banner()
-    time.sleep(0.3)
+    time.sleep(0.2)
 
-    print(f"{G_BRIGHT}======================================================================{RESET}")
+    hacker_typing_print("======================================================================", G_BRIGHT, 0.002, 10)
     log_step("SYSTEM OVERRIDE INITIATED // TARGET: blazecodeprakhar", "[⚡]")
-    print(f"{G_BRIGHT}======================================================================{RESET}")
+    hacker_typing_print("======================================================================", G_BRIGHT, 0.002, 10)
     print()
 
     try:
@@ -138,15 +191,17 @@ def main():
         print()
         matrix_stream_effect(6)
         print()
-        victory_box = f"""
-{G_BRIGHT}
-  ┌──────────────────────────────────────────────────────────────────┐
-  │  [✔] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB      │
-  │      TERMINAL AUTO-DISAPPEARING IN 3 SECONDS...                  │
-  └──────────────────────────────────────────────────────────────────┘
-{RESET}
-"""
-        print(victory_box)
+
+        play_victory_jingle()
+        victory_box = [
+            "  ┌──────────────────────────────────────────────────────────────────┐",
+            "  │  [✔] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB      │",
+            "  │      TERMINAL AUTO-DISAPPEARING IN 3 SECONDS...                  │",
+            "  └──────────────────────────────────────────────────────────────────┘"
+        ]
+        for line in victory_box:
+            hacker_typing_print(line, color=G_BRIGHT, char_delay=0.005, beep_interval=4)
+
         time.sleep(3.0)
 
     except Exception as e:
