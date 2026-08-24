@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
-hacker_update.py — Terminal-Only Green Matrix Hacker Auto-Update Script
+hacker_update.py — Fullscreen Terminal Matrix Hacker Auto-Update Script
 ========================================================================
-Runs inside a terminal console with 100% glowing green text, red message for Blaze,
-and background sound.mp3 audio looping silently while the terminal is open.
+Runs inside a terminal console with 100% glowing green text, red Blaze system alerts,
+fullscreen continuous matrix rain streams, background sound.mp3 playback, and auto-close.
 """
 
 import ctypes
 import datetime
 import os
 import random
+import shutil
 import subprocess
 import sys
 import time
@@ -18,11 +19,22 @@ REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
 MP3_PATH = os.path.join(REPO_ROOT, "sound.mp3")
 
-# ANSI Color Codes
+# ANSI Color Codes for Hacker Palette
 G_BRIGHT = "\033[1;32m"
 G_DIM    = "\033[2;32m"
 RED      = "\033[1;31m"
+CYAN     = "\033[1;36m"
+WHITE    = "\033[1;37m"
 RESET    = "\033[0m"
+
+
+def get_terminal_width():
+    """Gets current console width to fill the entire screen with matrix text."""
+    try:
+        cols = shutil.get_terminal_size((110, 30)).columns
+        return max(80, cols - 2)
+    except Exception:
+        return 110
 
 
 def start_background_audio():
@@ -57,8 +69,8 @@ def clear_screen():
     os.system("cls" if sys.platform == "win32" else "clear")
 
 
-def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.003):
-    """Character-by-character printing effect."""
+def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.0015):
+    """Fast character-by-character printing effect."""
     sys.stdout.write(color)
     sys.stdout.flush()
     for char in text:
@@ -69,17 +81,36 @@ def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.003):
     sys.stdout.flush()
 
 
-def matrix_stream_effect(lines=5, delay=0.015):
-    """Fast hacking matrix code stream."""
+def continuous_matrix_rain(lines=8, delay=0.008):
+    """Fills the ENTIRE console width with dense continuous matrix rain streams."""
+    width = get_terminal_width()
     chars = "0101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*+=-_<>/"
+    hex_tokens = ["0x7F", "0x8A", "0xFF", "0x00", "0xA9", "0x3C", "0x4D", "0xE1"]
+    
     for _ in range(lines):
-        line = "".join(random.choice(chars) for _ in range(70))
-        sys.stdout.write(f"{G_DIM}{line}{RESET}\n")
+        line_chars = []
+        curr_len = 0
+        while curr_len < width:
+            if random.random() > 0.7:
+                tok = random.choice(hex_tokens) + " "
+                line_chars.append(tok)
+                curr_len += len(tok)
+            else:
+                ch = random.choice(chars)
+                line_chars.append(ch)
+                curr_len += 1
+        
+        line_str = "".join(line_chars)[:width]
+        color = G_DIM if random.random() > 0.2 else G_BRIGHT
+        sys.stdout.write(f"{color}{line_str}{RESET}\n")
         sys.stdout.flush()
         time.sleep(delay)
 
 
-def print_banner():
+def print_hacker_header():
+    width = get_terminal_width()
+    border = "=" * width
+
     banner_lines = [
         "  ██████╗ ██╗      █████╗ ███████╗███████╗",
         "  ██╔══██╗██║     ██╔══██╗╚══███╔╝██╔════╝",
@@ -89,8 +120,22 @@ def print_banner():
         "  ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝",
         "  [ SYSTEM OVERRIDE // BLAZE GITHUB READ-ME SCOREBOARD SYNC ]"
     ]
+
+    hacker_typing_print(border, G_BRIGHT, 0.0005)
     for line in banner_lines:
-        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001)
+        hacker_typing_print(line, G_BRIGHT, 0.001)
+    hacker_typing_print(border, G_BRIGHT, 0.0005)
+
+
+def print_red_blaze_alerts():
+    width = get_terminal_width()
+    border = "=" * width
+    
+    hacker_typing_print(border, RED, 0.0005)
+    hacker_typing_print(" [🔥] CRITICAL OVERRIDE INITIATED: TARGET BLAZE REPOSITORY", RED, 0.001)
+    hacker_typing_print(" [🔥] MESSAGE TO BLAZE: SYSTEM MATRIX OVERRIDE ONLINE & INITIALIZED", RED, 0.001)
+    hacker_typing_print(" [🔥] BYPASSING SECURITY PROTOCOLS... ACCESSING ORIGIN/MAIN", RED, 0.001)
+    hacker_typing_print(border, RED, 0.0005)
 
 
 def log_step(text, symbol="[+]"):
@@ -98,7 +143,7 @@ def log_step(text, symbol="[+]"):
     ts = datetime.datetime.now().strftime("%H:%M:%S")
     tag = f"{symbol:<4}"
     full_str = f"{tag} [{ts}] {text}"
-    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.003)
+    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.002)
 
 
 def main():
@@ -108,23 +153,23 @@ def main():
     # Start background sound.mp3 playback
     start_background_audio()
 
-    print_banner()
-    time.sleep(0.15)
+    # Intro continuous matrix rain stream
+    continuous_matrix_rain(lines=12, delay=0.005)
 
-    # Red message sent to Blaze as requested
-    hacker_typing_print("======================================================================", RED, 0.001)
-    hacker_typing_print(" [🔥] MESSAGE TO BLAZE: SYSTEM MATRIX OVERRIDE ONLINE & INITIALIZED", RED, 0.002)
-    hacker_typing_print("======================================================================", RED, 0.001)
+    print_hacker_header()
+    time.sleep(0.1)
+
+    print_red_blaze_alerts()
     print()
 
-    hacker_typing_print("======================================================================", G_BRIGHT, 0.001)
+    # Continuous rain stream before execution starts
+    continuous_matrix_rain(lines=8, delay=0.005)
     log_step("SYSTEM OVERRIDE INITIATED // TARGET: blazecodeprakhar", "[*]")
-    hacker_typing_print("======================================================================", G_BRIGHT, 0.001)
     print()
 
     try:
-        # Step 1
-        matrix_stream_effect(4)
+        # Step 1: Fetch
+        continuous_matrix_rain(lines=6, delay=0.005)
         log_step("BYPASSING GITHUB RATE-LIMIT FIREWALL...")
         log_step("Fetching contribution metrics from GitHub API...", "[+]")
         fetch_cmd = [sys.executable, os.path.join(SCRIPTS_DIR, "fetch_contributions.py")]
@@ -135,8 +180,8 @@ def main():
             log_step("GitHub contribution metrics sync complete.", "[OK]")
         print()
 
-        # Step 2
-        matrix_stream_effect(4)
+        # Step 2: Render Heatmap
+        continuous_matrix_rain(lines=6, delay=0.005)
         log_step("RE-RENDERING HEATMAP SVG MATRIX...")
         log_step("Compiling animated contribution heatmap SVG artwork...", "[+]")
         render_cmd = [sys.executable, os.path.join(SCRIPTS_DIR, "render_heatmap_svg.py")]
@@ -147,8 +192,8 @@ def main():
             log_step("Animated contribution heatmap SVG compiled.", "[OK]")
         print()
 
-        # Step 3
-        matrix_stream_effect(4)
+        # Step 3: Streak SVG
+        continuous_matrix_rain(lines=6, delay=0.005)
         log_step("GENERATING STREAK VISUAL MATRIX...")
         log_step("Generating streak SVG metrics...", "[+]")
         streak_out = os.path.join(REPO_ROOT, "streak.svg")
@@ -161,7 +206,7 @@ def main():
         print()
 
         # Git operations
-        matrix_stream_effect(4)
+        continuous_matrix_rain(lines=6, delay=0.005)
         log_step("STAGING PAYLOAD & COMMITTING TO MAIN BRANCH...")
         subprocess.run(["git", "add", "-A"], cwd=REPO_ROOT, capture_output=True)
 
@@ -184,22 +229,35 @@ def main():
                 print(f"{G_DIM}[!] Push completed with message: {push_res.stderr.strip()}{RESET}")
 
         print()
-        matrix_stream_effect(6)
+
+        # Continuous matrix rain stream before ending banner
+        continuous_matrix_rain(lines=10, delay=0.005)
         print()
 
-        # Red message for Blaze in victory section
-        hacker_typing_print("  [🔥] BLAZE PROTOCOL STATUS: ALL SYSTEMS OPERATIONAL", RED, 0.002)
+        # Red Blaze Victory Status Alert
+        width = get_terminal_width()
+        border = "=" * width
+        hacker_typing_print(border, RED, 0.0005)
+        hacker_typing_print(" [🔥] BLAZE PROTOCOL: MISSION ACCOMPLISHED // ALL SYSTEMS OPERATIONAL", RED, 0.001)
+        hacker_typing_print(border, RED, 0.0005)
+        print()
 
+        box_w = min(width - 4, 76)
+        line1 = " [OK] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB".ljust(box_w)
+        line2 = "      TERMINAL AUTO-DISAPPEARING IN 3 SECONDS...".ljust(box_w)
+        
         victory_box = [
-            "  ┌──────────────────────────────────────────────────────────────────┐",
-            "  │  [OK] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB     │",
-            "  │       TERMINAL AUTO-DISAPPEARING IN 3 SECONDS...                 │",
-            "  └──────────────────────────────────────────────────────────────────┘"
+            f"  ┌{'─' * box_w}┐",
+            f"  │{line1}│",
+            f"  │{line2}│",
+            f"  └{'─' * box_w}┘"
         ]
         for line in victory_box:
             hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001)
 
-        time.sleep(3.0)
+        # Final continuous matrix rain stream right up until exit
+        continuous_matrix_rain(lines=15, delay=0.005)
+        time.sleep(2.0)
 
     except Exception as e:
         print(f"\n{G_BRIGHT}[!] CRITICAL OVERRIDE ERROR: {str(e)}{RESET}")
