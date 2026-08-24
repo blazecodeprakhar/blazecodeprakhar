@@ -1,5 +1,5 @@
 """
-Render "AVI" as an EXTRUDED 3D wordmark rasterized to ASCII, and emit it as an
+Render "BLAZE" as an EXTRUDED 3D wordmark rasterized to ASCII, and emit it as an
 SVG that animates on GitHub (SMIL only -- GitHub runs SVG animations in <img>,
 but never JS).
 
