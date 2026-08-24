@@ -2,20 +2,23 @@
 """
 hacker_update.py — Terminal-Only Green Matrix Hacker Auto-Update Script
 ========================================================================
-Runs inside a terminal console with 100% glowing green text, razor-sharp digital
-electric typing audio synced to every single character, crisp alignment, and auto-close.
+Runs inside a terminal console with 100% glowing green text, loud crisp in-memory
+WAV sci-fi digital electric typing sound effects, crisp alignment, and auto-close.
 """
 
 import datetime
+import io
+import math
 import os
 import random
+import struct
 import subprocess
 import sys
-import threading
 import time
 
 try:
     import winsound
+    import wave
     HAS_SOUND = True
 except ImportError:
     HAS_SOUND = False
@@ -29,49 +32,75 @@ G_DIM    = "\033[2;32m"
 RESET    = "\033[0m"
 
 
-def play_sharp_digital_click():
-    """
-    Razor-sharp high-frequency electric digital click (4800Hz - 7200Hz, 3ms).
-    Triggered on every single character for 100% accurate sci-fi typing.
-    """
-    if not HAS_SOUND:
-        return
-    freq = random.choice([4800, 5400, 6000, 6600, 7200])
+def generate_wav_bytes(frequencies, total_samples=600, decay_rate=150, volume=22000):
+    """Generates a crisp in-memory WAV byte stream for loud sci-fi digital sound effects."""
+    buf = io.BytesIO()
+    w = wave.open(buf, 'wb')
+    w.setnchannels(1)
+    w.setsampwidth(2)
+    w.setframerate(44100)
+    
+    samples = []
+    num_freqs = len(frequencies)
+    samples_per_freq = total_samples // num_freqs
+    
+    for idx, freq in enumerate(frequencies):
+        for i in range(samples_per_freq):
+            t = i / 44100.0
+            # Sine wave with exponential decay envelope for ultra-crisp digital click
+            env = math.exp(-i / decay_rate)
+            val = int(volume * env * math.sin(2 * math.pi * freq * t))
+            samples.append(val)
+            
+    w.writeframes(struct.pack('<' + 'h' * len(samples), *samples))
+    w.close()
+    return buf.getvalue()
+
+
+# Pre-generate high-definition sci-fi digital sound samples
+if HAS_SOUND:
     try:
-        threading.Thread(
-            target=winsound.Beep,
-            args=(freq, 3),
-            daemon=True
-        ).start()
+        # Sharp high-frequency electric typing clicks
+        CLICK_WAV_1 = generate_wav_bytes([2600], total_samples=550, decay_rate=100)
+        CLICK_WAV_2 = generate_wav_bytes([3200], total_samples=550, decay_rate=100)
+        CLICK_WAV_3 = generate_wav_bytes([3800], total_samples=550, decay_rate=100)
+        CLICK_VARIANTS = [CLICK_WAV_1, CLICK_WAV_2, CLICK_WAV_3]
+
+        # Sci-Fi step telemetry chirp
+        CHIRP_WAV = generate_wav_bytes([1800, 3200], total_samples=1200, decay_rate=250)
+
+        # Sci-Fi access granted victory chime
+        SUCCESS_WAV = generate_wav_bytes([1600, 2400, 3200, 4200], total_samples=3000, decay_rate=400)
     except Exception:
-        pass
+        HAS_SOUND = False
 
 
-def play_sharp_telemetry_chirp():
-    """Sharp dual-frequency high-tech step activation chirp."""
-    if not HAS_SOUND:
-        return
-    def _chirp():
-        for f in [4200, 6400]:
-            try:
-                winsound.Beep(f, 8)
-            except Exception:
-                pass
-    threading.Thread(target=_chirp, daemon=True).start()
+def play_click():
+    """Plays sharp digital electric typing click sound."""
+    if HAS_SOUND:
+        try:
+            wav_data = random.choice(CLICK_VARIANTS)
+            winsound.PlaySound(wav_data, winsound.SND_MEMORY | winsound.SND_ASYNC)
+        except Exception:
+            pass
 
 
-def play_sharp_access_granted():
-    """Razor-sharp digital high-tech completion burst."""
-    if not HAS_SOUND:
-        return
-    def _burst():
-        for f in [3200, 4800, 6400, 8000]:
-            try:
-                winsound.Beep(f, 15)
-            except Exception:
-                pass
-            time.sleep(0.008)
-    threading.Thread(target=_burst, daemon=True).start()
+def play_chirp():
+    """Plays sci-fi step activation telemetry chirp."""
+    if HAS_SOUND:
+        try:
+            winsound.PlaySound(CHIRP_WAV, winsound.SND_MEMORY | winsound.SND_ASYNC)
+        except Exception:
+            pass
+
+
+def play_success_chime():
+    """Plays sci-fi victory completion chime."""
+    if HAS_SOUND:
+        try:
+            winsound.PlaySound(SUCCESS_WAV, winsound.SND_MEMORY | winsound.SND_ASYNC)
+        except Exception:
+            pass
 
 
 def enable_windows_ansi():
@@ -85,30 +114,28 @@ def clear_screen():
     os.system("cls" if sys.platform == "win32" else "clear")
 
 
-def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.002, sound_every=1):
-    """
-    Prints character-by-character with 100% accurate, razor-sharp digital electric clicks.
-    """
+def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.003, sound_freq=1):
+    """Prints character-by-character with loud, crisp digital electric typing sound effects."""
     sys.stdout.write(color)
     sys.stdout.flush()
     for idx, char in enumerate(text):
         sys.stdout.write(char)
         sys.stdout.flush()
-        if idx % sound_every == 0 and char not in " \n\r\t":
-            play_sharp_digital_click()
+        if idx % sound_freq == 0 and char not in " \n\r\t":
+            play_click()
         time.sleep(char_delay)
     sys.stdout.write(RESET + "\n")
     sys.stdout.flush()
 
 
-def matrix_stream_effect(lines=5, delay=0.012):
-    """Fast hacking matrix code stream with razor-sharp digital zaps."""
+def matrix_stream_effect(lines=5, delay=0.015):
+    """Fast hacking matrix code stream with crisp digital micro-zaps."""
     chars = "0101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*+=-_<>/"
     for _ in range(lines):
         line = "".join(random.choice(chars) for _ in range(70))
         sys.stdout.write(f"{G_DIM}{line}{RESET}\n")
         sys.stdout.flush()
-        play_sharp_digital_click()
+        play_click()
         time.sleep(delay)
 
 
@@ -123,16 +150,16 @@ def print_banner():
         "  [ SYSTEM OVERRIDE // BLAZE GITHUB READ-ME SCOREBOARD SYNC ]"
     ]
     for line in banner_lines:
-        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001, sound_every=2)
+        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001, sound_freq=2)
 
 
 def log_step(text, symbol="[+]"):
-    """Prints perfectly aligned log step with sharp digital audio."""
-    play_sharp_telemetry_chirp()
+    """Prints perfectly aligned log step with loud digital telemetry audio."""
+    play_chirp()
     ts = datetime.datetime.now().strftime("%H:%M:%S")
     tag = f"{symbol:<4}"
     full_str = f"{tag} [{ts}] {text}"
-    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.002, sound_every=1)
+    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.003, sound_freq=1)
 
 
 def main():
@@ -211,7 +238,7 @@ def main():
         matrix_stream_effect(6)
         print()
 
-        play_sharp_access_granted()
+        play_success_chime()
         victory_box = [
             "  ┌──────────────────────────────────────────────────────────────────┐",
             "  │  [OK] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB     │",
@@ -219,7 +246,7 @@ def main():
             "  └──────────────────────────────────────────────────────────────────┘"
         ]
         for line in victory_box:
-            hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001, sound_every=2)
+            hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001, sound_freq=2)
 
         time.sleep(3.0)
 
