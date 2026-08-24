@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-hacker_update.py — Fullscreen Terminal Matrix Hacker Auto-Update Script
-========================================================================
-Runs inside a terminal console with 100% glowing green text, red Blaze system alerts,
-fullscreen continuous matrix rain streams, background sound.mp3 playback, and auto-close.
+hacker_update.py — Fullscreen Japanese Cyberpunk Matrix Hacker Auto-Update Script
+==================================================================================
+Runs inside a terminal console with glowing green text, authentic Japanese Katakana
+matrix streams, red Blaze alerts, background sound.mp3 playback, and auto-close.
 """
 
 import ctypes
@@ -18,6 +18,13 @@ import time
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
 MP3_PATH = os.path.join(REPO_ROOT, "sound.mp3")
+
+# Ensure UTF-8 output encoding for Japanese Katakana characters
+if sys.stdout.encoding.lower() != 'utf-8':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 # ANSI Color Codes for Hacker Palette
 G_BRIGHT = "\033[1;32m"
@@ -59,8 +66,9 @@ def stop_background_audio():
 
 
 def enable_windows_ansi():
-    """Enables ANSI color processing and green console palette on Windows."""
+    """Enables ANSI color processing and UTF-8 green console palette on Windows."""
     if sys.platform == "win32":
+        os.system("chcp 65001 > nul")
         os.system("color 0A")
         os.system("title SYSTEM OVERRIDE // BLAZE GITHUB PROFILE SYNC")
 
@@ -82,21 +90,22 @@ def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.0015):
 
 
 def continuous_matrix_rain(lines=8, delay=0.008):
-    """Fills the ENTIRE console width with dense continuous matrix rain streams."""
+    """Fills the ENTIRE console width with Japanese Katakana & Matrix rain streams."""
     width = get_terminal_width()
-    chars = "0101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*+=-_<>/"
-    hex_tokens = ["0x7F", "0x8A", "0xFF", "0x00", "0xA9", "0x3C", "0x4D", "0xE1"]
+    # Authentic Matrix Rain Katakana & Cyber characters
+    jp_chars = "ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ01010101XYZ@#$%&*+=-_<>"
+    hex_tokens = ["0x7F", "0x8A", "0xFF", "0x00", "データ", "同期", "侵入", "オーバーライド"]
     
     for _ in range(lines):
         line_chars = []
         curr_len = 0
         while curr_len < width:
-            if random.random() > 0.7:
+            if random.random() > 0.75:
                 tok = random.choice(hex_tokens) + " "
                 line_chars.append(tok)
                 curr_len += len(tok)
             else:
-                ch = random.choice(chars)
+                ch = random.choice(jp_chars)
                 line_chars.append(ch)
                 curr_len += 1
         
@@ -118,7 +127,7 @@ def print_hacker_header():
         "  ██╔══██╗██║     ██╔══██║ ███╔╝  ██╔══╝  ",
         "  ██████╔╝███████╗██║  ██║███████╗███████╗",
         "  ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝",
-        "  [ SYSTEM OVERRIDE // BLAZE GITHUB READ-ME SCOREBOARD SYNC ]"
+        "  [ システム・オーバーライド // サイバー空間 // BLAZE GITHUB SCOREBOARD SYNC ]"
     ]
 
     hacker_typing_print(border, G_BRIGHT, 0.0005)
@@ -132,9 +141,9 @@ def print_red_blaze_alerts():
     border = "=" * width
     
     hacker_typing_print(border, RED, 0.0005)
-    hacker_typing_print(" [🔥] CRITICAL OVERRIDE INITIATED: TARGET BLAZE REPOSITORY", RED, 0.001)
-    hacker_typing_print(" [🔥] MESSAGE TO BLAZE: SYSTEM MATRIX OVERRIDE ONLINE & INITIALIZED", RED, 0.001)
-    hacker_typing_print(" [🔥] BYPASSING SECURITY PROTOCOLS... ACCESSING ORIGIN/MAIN", RED, 0.001)
+    hacker_typing_print(" [🔥] システム侵入 // BLAZE MATRIX PROTOCOL ONLINE", RED, 0.001)
+    hacker_typing_print(" [🔥] 警告: セキュリティオーバーライド実行中... ACCESSING ORIGIN/MAIN", RED, 0.001)
+    hacker_typing_print(" [🔥] MESSAGE TO BLAZE: データベース同期接続完了", RED, 0.001)
     hacker_typing_print(border, RED, 0.0005)
 
 
@@ -153,7 +162,7 @@ def main():
     # Start background sound.mp3 playback
     start_background_audio()
 
-    # Intro continuous matrix rain stream
+    # Intro Japanese Matrix Rain Cascade
     continuous_matrix_rain(lines=12, delay=0.005)
 
     print_hacker_header()
@@ -162,9 +171,9 @@ def main():
     print_red_blaze_alerts()
     print()
 
-    # Continuous rain stream before execution starts
+    # Continuous Japanese Matrix Rain before execution
     continuous_matrix_rain(lines=8, delay=0.005)
-    log_step("SYSTEM OVERRIDE INITIATED // TARGET: blazecodeprakhar", "[*]")
+    log_step("システムオーバーライド開始 // TARGET: blazecodeprakhar", "[*]")
     print()
 
     try:
@@ -177,7 +186,7 @@ def main():
         if res1.returncode != 0:
             print(f"{G_DIM}[!] Warning fetching contributions: {res1.stderr.strip()}{RESET}")
         else:
-            log_step("GitHub contribution metrics sync complete.", "[OK]")
+            log_step("GitHub contribution metrics sync complete (データ同期完了).", "[OK]")
         print()
 
         # Step 2: Render Heatmap
@@ -230,7 +239,7 @@ def main():
 
         print()
 
-        # Continuous matrix rain stream before ending banner
+        # Continuous Katakana matrix rain stream
         continuous_matrix_rain(lines=10, delay=0.005)
         print()
 
@@ -238,13 +247,13 @@ def main():
         width = get_terminal_width()
         border = "=" * width
         hacker_typing_print(border, RED, 0.0005)
-        hacker_typing_print(" [🔥] BLAZE PROTOCOL: MISSION ACCOMPLISHED // ALL SYSTEMS OPERATIONAL", RED, 0.001)
+        hacker_typing_print(" [🔥] BLAZE PROTOCOL: 任務完了 // ALL SYSTEMS OPERATIONAL", RED, 0.001)
         hacker_typing_print(border, RED, 0.0005)
         print()
 
-        box_w = min(width - 4, 76)
-        line1 = " [OK] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB".ljust(box_w)
-        line2 = "      TERMINAL AUTO-DISAPPEARING IN 3 SECONDS...".ljust(box_w)
+        box_w = min(width - 4, 78)
+        line1 = " [OK] アクセス許可 // ACCESS GRANTED // GITHUB SCOREBOARD SYNCHRONIZED".ljust(box_w)
+        line2 = "      システム終了まで 3 秒... (TERMINAL AUTO-DISAPPEARING IN 3 SECONDS)".ljust(box_w)
         
         victory_box = [
             f"  ┌{'─' * box_w}┐",
@@ -255,7 +264,7 @@ def main():
         for line in victory_box:
             hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001)
 
-        # Final continuous matrix rain stream right up until exit
+        # Final Japanese Katakana matrix rain cascade
         continuous_matrix_rain(lines=15, delay=0.005)
         time.sleep(2.0)
 
