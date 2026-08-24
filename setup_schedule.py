@@ -3,7 +3,7 @@
 setup_schedule.py — Windows Task Scheduler Installer for 11:11 PM Daily Update
 ==============================================================================
 Registers a Windows Scheduled Task named 'BlazeCodePrakharReadmeAutoUpdate' that
-triggers 'hacker_update.py' every day at 11:11 PM (23:11).
+triggers 'hacker_update.py' in a green hacker terminal every day at 11:11 PM (23:11).
 """
 
 import argparse
@@ -16,30 +16,17 @@ REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 HACKER_SCRIPT = os.path.join(REPO_ROOT, "hacker_update.py")
 
 
-def get_python_exe():
-    """Returns path to pythonw.exe if available, else python.exe."""
-    python_dir = os.path.dirname(sys.executable)
-    pythonw = os.path.join(python_dir, "pythonw.exe")
-    if os.path.exists(pythonw):
-        return f'"{pythonw}"'
-    return f'"{sys.executable}"'
-
-
 def install_task(time_str="23:11"):
-    py_exe = get_python_exe()
-    cmd = (
-        f'schtasks /create /tn "{TASK_NAME}" '
-        f'/tr \'{py_exe} "{HACKER_SCRIPT}"\' '
-        f'/sc daily /st {time_str} /f'
-    )
+    # Target command: cmd.exe /c start "SYSTEM OVERRIDE" python hacker_update.py
+    tr_command = f'cmd.exe /c start "SYSTEM OVERRIDE" "{sys.executable}" "{HACKER_SCRIPT}"'
+    
     print(f"[*] Registering Windows Scheduled Task '{TASK_NAME}' for daily execution at {time_str}...")
     
-    # Run schtasks
     result = subprocess.run(
         [
             "schtasks", "/create",
             "/tn", TASK_NAME,
-            "/tr", f'{py_exe} "{HACKER_SCRIPT}"',
+            "/tr", tr_command,
             "/sc", "daily",
             "/st", time_str,
             "/f"
@@ -51,6 +38,7 @@ def install_task(time_str="23:11"):
     if result.returncode == 0:
         print(f"[OK] SUCCESS: Scheduled task '{TASK_NAME}' registered successfully!")
         print(f"     - Schedule: Daily @ {time_str} (11:11 PM)")
+        print(f"     - Terminal Mode: Green Matrix Hacker Terminal Window")
         print(f"     - Target Script: {HACKER_SCRIPT}")
     else:
         print(f"[ERROR] Error registering task: {result.stderr.strip()}")
