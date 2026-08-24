@@ -2,8 +2,8 @@
 """
 hacker_update.py — Terminal-Only Green Matrix Hacker Auto-Update Script
 ========================================================================
-Runs inside a terminal console with glowing green text, retro movie hacking
-typing audio / beeps, matrix stream visual effects, and auto-close.
+Runs inside a terminal console with 100% glowing green text, ultra-fast electric
+staccato typing sound effects, crisp alignment, and auto-close.
 """
 
 import datetime
@@ -23,45 +23,47 @@ except ImportError:
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
 
-# ANSI Color Codes for Glowing Terminal Green
+# ANSI Color Codes for 100% Glowing Terminal Green
 G_BRIGHT = "\033[1;32m"
 G_DIM    = "\033[2;32m"
-G_ACCENT = "\033[1;96m"
 RESET    = "\033[0m"
 
 
 def play_beep(freq, duration_ms):
-    """Plays a frequency beep asynchronously on Windows."""
+    """Plays a micro high-frequency electric pulse asynchronously on Windows."""
     if HAS_SOUND:
         try:
-            threading.Thread(target=winsound.Beep, args=(int(freq), int(duration_ms)), daemon=True).start()
+            threading.Thread(
+                target=winsound.Beep,
+                args=(int(freq), int(duration_ms)),
+                daemon=True
+            ).start()
         except Exception:
             pass
 
 
-def play_typing_beep():
-    """Retro sci-fi computer terminal typing click/beep."""
-    freq = random.choice([1600, 1800, 2000, 2200, 2400, 2600])
-    play_beep(freq, 12)
+def play_electric_type_sound():
+    """Very fast, high-pitched electric staccato typing sound (old hacker movie feel)."""
+    freq = random.choice([3200, 3600, 4000, 4400, 4800])
+    play_beep(freq, 6)
 
 
-def play_victory_jingle():
-    """Classic 80s movie hacker 'ACCESS GRANTED' ascending synth bleeps."""
+def play_electric_burst():
+    """Rapid electric pulse burst for victory screen."""
     if not HAS_SOUND:
         return
-    def _jingle():
-        notes = [(880, 80), (1046, 80), (1318, 80), (1567, 80), (1760, 220), (2093, 350)]
-        for f, d in notes:
+    def _burst():
+        for f in [3500, 4000, 4500, 5000, 5500]:
             try:
-                winsound.Beep(f, d)
+                winsound.Beep(f, 15)
             except Exception:
                 pass
-            time.sleep(0.02)
-    threading.Thread(target=_jingle, daemon=True).start()
+            time.sleep(0.01)
+    threading.Thread(target=_burst, daemon=True).start()
 
 
 def enable_windows_ansi():
-    """Enables ANSI color processing on Windows terminal console."""
+    """Enables ANSI color processing and green console palette on Windows."""
     if sys.platform == "win32":
         os.system("color 0A")
         os.system("title SYSTEM OVERRIDE // BLAZE GITHUB PROFILE SYNC")
@@ -71,28 +73,28 @@ def clear_screen():
     os.system("cls" if sys.platform == "win32" else "clear")
 
 
-def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.008, beep_interval=3):
-    """Prints text character-by-character with retro movie hacking beeps."""
+def hacker_typing_print(text, color=G_BRIGHT, char_delay=0.003, beep_freq=2):
+    """Ultra-fast character-by-character printing with rapid electric typing sounds."""
     sys.stdout.write(color)
     sys.stdout.flush()
     for idx, char in enumerate(text):
         sys.stdout.write(char)
         sys.stdout.flush()
-        if idx % beep_interval == 0 and char not in " \n":
-            play_typing_beep()
+        if idx % beep_freq == 0 and char not in " \n\r\t":
+            play_electric_type_sound()
         time.sleep(char_delay)
     sys.stdout.write(RESET + "\n")
     sys.stdout.flush()
 
 
-def matrix_stream_effect(lines=5, delay=0.025):
-    """Simulates a fast hacking matrix code stream with rapid micro-beeps."""
+def matrix_stream_effect(lines=5, delay=0.015):
+    """Fast hacking matrix code stream with rapid electric micro-zaps."""
     chars = "0101010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*+=-_<>/"
     for i in range(lines):
-        line = "".join(random.choice(chars) for _ in range(68))
+        line = "".join(random.choice(chars) for _ in range(70))
         sys.stdout.write(f"{G_DIM}{line}{RESET}\n")
         sys.stdout.flush()
-        play_beep(1200 + (i % 6) * 250, 10)
+        play_beep(3800 + (i % 4) * 300, 5)
         time.sleep(delay)
 
 
@@ -107,24 +109,27 @@ def print_banner():
         "  [ SYSTEM OVERRIDE // BLAZE GITHUB READ-ME SCOREBOARD SYNC ]"
     ]
     for line in banner_lines:
-        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.003, beep_interval=4)
+        hacker_typing_print(line, color=G_BRIGHT, char_delay=0.001, beep_freq=3)
 
 
-def log_step(text, symbol="[▶]"):
+def log_step(text, symbol="[+]"):
+    """Prints perfectly aligned log step in 100% bright green text."""
     ts = datetime.datetime.now().strftime("%H:%M:%S")
-    full_str = f"{symbol} [{ts}] {text}"
-    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.01, beep_interval=3)
+    # Clean 4-char aligned tag: [OK], [+], [!], [i]
+    tag = f"{symbol:<4}"
+    full_str = f"{tag} [{ts}] {text}"
+    hacker_typing_print(full_str, color=G_BRIGHT, char_delay=0.003, beep_freq=2)
 
 
 def main():
     enable_windows_ansi()
     clear_screen()
     print_banner()
-    time.sleep(0.2)
+    time.sleep(0.15)
 
-    hacker_typing_print("======================================================================", G_BRIGHT, 0.002, 10)
-    log_step("SYSTEM OVERRIDE INITIATED // TARGET: blazecodeprakhar", "[⚡]")
-    hacker_typing_print("======================================================================", G_BRIGHT, 0.002, 10)
+    hacker_typing_print("======================================================================", G_BRIGHT, 0.001, 8)
+    log_step("SYSTEM OVERRIDE INITIATED // TARGET: blazecodeprakhar", "[*]")
+    hacker_typing_print("======================================================================", G_BRIGHT, 0.001, 8)
     print()
 
     try:
@@ -137,7 +142,7 @@ def main():
         if res1.returncode != 0:
             print(f"{G_DIM}[!] Warning fetching contributions: {res1.stderr.strip()}{RESET}")
         else:
-            log_step("GitHub contribution metrics sync complete.", "[✔]")
+            log_step("GitHub contribution metrics sync complete.", "[OK]")
         print()
 
         # Step 2
@@ -149,7 +154,7 @@ def main():
         if res2.returncode != 0:
             print(f"{G_DIM}[!] Warning rendering heatmap: {res2.stderr.strip()}{RESET}")
         else:
-            log_step("Animated contribution heatmap SVG compiled.", "[✔]")
+            log_step("Animated contribution heatmap SVG compiled.", "[OK]")
         print()
 
         # Step 3
@@ -162,7 +167,7 @@ def main():
         if res3.returncode != 0:
             print(f"{G_DIM}[!] Warning generating streak: {res3.stderr.strip()}{RESET}")
         else:
-            log_step("Contribution streak SVG generated.", "[✔]")
+            log_step("Contribution streak SVG generated.", "[OK]")
         print()
 
         # Git operations
@@ -184,7 +189,7 @@ def main():
                 push_res = subprocess.run(["git", "push", "origin", "master"], cwd=REPO_ROOT, capture_output=True, text=True)
             
             if push_res.returncode == 0:
-                log_step("PAYLOAD SUCCESSFULLY DELIVERED TO GITHUB ORIGIN!", "[✔]")
+                log_step("PAYLOAD SUCCESSFULLY DELIVERED TO GITHUB ORIGIN!", "[OK]")
             else:
                 print(f"{G_DIM}[!] Push completed with message: {push_res.stderr.strip()}{RESET}")
 
@@ -192,20 +197,20 @@ def main():
         matrix_stream_effect(6)
         print()
 
-        play_victory_jingle()
+        play_electric_burst()
         victory_box = [
             "  ┌──────────────────────────────────────────────────────────────────┐",
-            "  │  [✔] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB      │",
-            "  │      TERMINAL AUTO-DISAPPEARING IN 3 SECONDS...                  │",
+            "  │  [OK] ACCESS GRANTED // READ-ME SCOREBOARD UPDATED ON GITHUB     │",
+            "  │       TERMINAL AUTO-DISAPPEARING IN 3 SECONDS...                 │",
             "  └──────────────────────────────────────────────────────────────────┘"
         ]
         for line in victory_box:
-            hacker_typing_print(line, color=G_BRIGHT, char_delay=0.005, beep_interval=4)
+            hacker_typing_print(line, color=G_BRIGHT, char_delay=0.002, beep_freq=3)
 
         time.sleep(3.0)
 
     except Exception as e:
-        print(f"\n{G_BRIGHT}[❌] CRITICAL OVERRIDE ERROR: {str(e)}{RESET}")
+        print(f"\n{G_BRIGHT}[!] CRITICAL OVERRIDE ERROR: {str(e)}{RESET}")
         time.sleep(5.0)
 
 
