@@ -11,8 +11,8 @@
 
 <table>
 <tr>
-<td valign="top"><img src="https://raw.githubusercontent.com/blazecodeprakhar/blazecodeprakhar/main/blaze-ascii.svg?v=20260825" width="370" alt="Prakhar Yadav — ASCII portrait" /></td>
-<td valign="top"><img src="https://raw.githubusercontent.com/blazecodeprakhar/blazecodeprakhar/main/wordmark.svg?v=20260825" width="490" alt="BLAZE — 3D ASCII wordmark" /></td>
+<td valign="top"><img src="./blaze-ascii.svg?v=3" width="370" alt="Prakhar Yadav — ASCII portrait" /></td>
+<td valign="top"><img src="./wordmark.svg?v=3" width="490" alt="BLAZE — 3D ASCII wordmark" /></td>
 </tr>
 </table>
 
