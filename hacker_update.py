@@ -20,9 +20,9 @@ SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
 MP3_PATH = os.path.join(REPO_ROOT, "sound.mp3")
 
 # Ensure UTF-8 output encoding for Japanese Katakana characters
-if sys.stdout.encoding.lower() != 'utf-8':
+if hasattr(sys.stdout, "reconfigure"):
     try:
-        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stdout.reconfigure(encoding="utf-8")
     except Exception:
         pass
 
@@ -180,12 +180,15 @@ def main():
         # Step 1: Fetch
         continuous_matrix_rain(lines=6, delay=0.005)
         log_step("BYPASSING GITHUB RATE-LIMIT FIREWALL...")
-        log_step("Fetching contribution metrics from GitHub API...", "[+]")
+        log_step("Fetching live contribution metrics from GitHub API...", "[+]")
         fetch_cmd = [sys.executable, os.path.join(SCRIPTS_DIR, "fetch_contributions.py")]
         res1 = subprocess.run(fetch_cmd, cwd=REPO_ROOT, capture_output=True, text=True)
         if res1.returncode != 0:
             print(f"{G_DIM}[!] Warning fetching contributions: {res1.stderr.strip()}{RESET}")
         else:
+            out_info = res1.stdout.strip()
+            if out_info:
+                log_step(f"METRICS RECV: {out_info}", "[i]")
             log_step("GitHub contribution metrics sync complete (データ同期完了).", "[OK]")
         print()
 
