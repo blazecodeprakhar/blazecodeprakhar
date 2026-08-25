@@ -95,7 +95,7 @@ BG = "#0d1117"
 BG2 = "#111722"
 FRAME = "#30363d"
 TITLE_TEXT = "#7d8590"
-INK = "#c9d1d9"
+INK = "#E1F204"
 
 PAD = 18
 TITLEBAR_H = 28
