@@ -58,7 +58,7 @@ def find_default_font():
 
 FONT_PATH = find_default_font()
 FONT_INDEX = int(os.environ.get("WORDMARK_FONT_INDEX", 0 if FONT_PATH and FONT_PATH.endswith(".ttf") else 2))
-TEXT = os.environ.get("WORDMARK_TEXT", "BLAZE")
+TEXT = os.environ.get("WORDMARK_TEXT", "PX9")
 
 
 MASK_H = 300           # glyph raster height in mask px (drives voxel density)
