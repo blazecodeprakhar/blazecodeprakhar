@@ -1,30 +1,72 @@
 #!/usr/bin/env python3
 """Generate an animated GitHub-streak SVG (squares light up one by one).
-Works standalone; designed to run in a GitHub Action daily to stay live.
+Reads from data/contributions.json (produced by fetch_contributions.py) to guarantee sync.
 Usage: python generate_streak_svg.py [username] [output.svg]
 """
 import sys, json, os, datetime, urllib.request
 
 USER = sys.argv[1] if len(sys.argv) > 1 else "blazecodeprakhar"
-
 OUT  = sys.argv[2] if len(sys.argv) > 2 else "streak.svg"
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATA_JSON = os.path.join(HERE, "..", "data", "contributions.json")
+
+
+def level_for(count):
+    if count == 0:
+        return 0
+    if count <= 5:
+        return 1
+    if count <= 15:
+        return 2
+    if count <= 30:
+        return 3
+    return 4
+
+
 def get_data(user):
+    # Primary: local data/contributions.json built from fetch_contributions.py
+    if os.path.exists(DATA_JSON):
+        try:
+            raw = json.load(open(DATA_JSON))
+            contribs = []
+            for d in raw.get("days", []):
+                contribs.append({
+                    "date": d["date"],
+                    "count": d["count"],
+                    "level": d.get("level", level_for(d["count"]))
+                })
+            total = raw.get("total_contributions", sum(c["count"] for c in contribs))
+            return contribs, total
+        except Exception as e:
+            print(f"Error reading {DATA_JSON}: {e}")
+
+    # Secondary: fetch using fetch_contributions module directly
+    try:
+        import fetch_contributions
+        days = fetch_contributions.fetch_days()
+        data = fetch_contributions.build_data(days)
+        contribs = [{"date": d["date"], "count": d["count"], "level": level_for(d["count"])} for d in data["days"]]
+        return contribs, data["total_contributions"]
+    except Exception as e:
+        print(f"Fetch module failed ({e}), trying fallback API...")
+
+    # Tertiary fallback: jogruber API
     url = f"https://github-contributions-api.jogruber.de/v4/{user}?y=last"
     try:
         with urllib.request.urlopen(url, timeout=25) as r:
-            return json.loads(r.read().decode())
+            raw = json.loads(r.read().decode())
+            return raw["contributions"], raw["total"]["lastYear"]
     except Exception as e:
-        # fallback to a local snapshot if the API is unreachable
-        here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "contrib.json")
+        here = os.path.join(HERE, "contrib.json")
         if os.path.exists(here):
             print("API failed (%s); using local contrib.json" % e)
-            return json.load(open(here))
+            raw = json.load(open(here))
+            return raw["contributions"], raw["total"]["lastYear"]
         raise
 
-data = get_data(USER)
-contribs = data["contributions"]
-total = data["total"]["lastYear"]
+
+contribs, total = get_data(USER)
 
 # ---- layout ----
 CELL, GAP, RAD, LEFT, TOP = 13, 3, 2.5, 34, 24
@@ -81,3 +123,4 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewB
 
 open(OUT, "w").write(svg)
 print(f"Wrote {OUT}: {n} days, {total:,} contributions, {len(svg)//1024} KB")
+

@@ -92,7 +92,7 @@ def render(data):
                 continue
             date = datetime.date.fromisoformat(cell[0])
             key = (date.year, date.month)
-            if key not in seen_months and date.day <= 7:
+            if key not in seen_months:
                 seen_months.add(key)
                 month_labels.append((ci, date.strftime("%b")))
             break

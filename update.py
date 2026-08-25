@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 update.py — One-shot contribution graph refresher
 ===================================================
@@ -26,6 +26,12 @@ import sys
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS   = os.path.join(REPO_ROOT, "scripts")
 
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 COMMIT_MSG = "chore: refresh contribution graph [skip ci]"
 
 # ── helpers ─────────────────────────────────────────────────────────────────
@@ -33,14 +39,14 @@ COMMIT_MSG = "chore: refresh contribution graph [skip ci]"
 def banner(text: str) -> None:
     width = 60
     print()
-    print("━" * width)
+    print("=" * width)
     print(f"  {text}")
-    print("━" * width)
+    print("=" * width)
 
 
 def run(cmd: list, cwd: str = REPO_ROOT, check: bool = True) -> subprocess.CompletedProcess:
     """Run a command, stream its output, and (optionally) raise on failure."""
-    print(f"\n▶  {' '.join(cmd)}")
+    print(f"\n>  {' '.join(cmd)}")
     result = subprocess.run(
         cmd,
         cwd=cwd,
@@ -48,7 +54,7 @@ def run(cmd: list, cwd: str = REPO_ROOT, check: bool = True) -> subprocess.Compl
         capture_output=False,
     )
     if check and result.returncode != 0:
-        print(f"\n✖  Command failed with exit code {result.returncode}", file=sys.stderr)
+        print(f"\n[X] Command failed with exit code {result.returncode}", file=sys.stderr)
         sys.exit(result.returncode)
     return result
 
