@@ -1,12 +1,12 @@
 {
   "username": "blazecodeprakhar",
-  "generated_at": "2026-10-24T17:41:07Z",
+  "generated_at": "2026-10-25T17:41:06Z",
   "range": {
-    "start": "2025-10-19",
-    "end": "2026-10-24"
+    "start": "2025-10-26",
+    "end": "2026-10-25"
   },
-  "total_contributions": 1343,
-  "active_days": 201,
+  "total_contributions": 1342,
+  "active_days": 200,
   "avg_per_active_day": 6.7,
   "current_streak": {
     "length": 5,
@@ -25,7 +25,7 @@
   "monthly": [
     {
       "month": "2025-10",
-      "total": 8
+      "total": 6
     },
     {
       "month": "2025-11",
@@ -73,38 +73,10 @@
     },
     {
       "month": "2026-10",
-      "total": 63
+      "total": 64
     }
   ],
   "days": [
-    {
-      "date": "2025-10-19",
-      "count": 0
-    },
-    {
-      "date": "2025-10-20",
-      "count": 0
-    },
-    {
-      "date": "2025-10-21",
-      "count": 0
-    },
-    {
-      "date": "2025-10-22",
-      "count": 0
-    },
-    {
-      "date": "2025-10-23",
-      "count": 0
-    },
-    {
-      "date": "2025-10-24",
-      "count": 0
-    },
-    {
-      "date": "2025-10-25",
-      "count": 2
-    },
     {
       "date": "2025-10-26",
       "count": 0
@@ -1559,7 +1531,11 @@
     },
     {
       "date": "2026-10-24",
-      "count": 3
+      "count": 4
+    },
+    {
+      "date": "2026-10-25",
+      "count": 0
     }
   ]
 }
